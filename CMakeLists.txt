@@ -2,8 +2,11 @@ SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6 FATAL_ERROR)
 CMAKE_POLICY(VERSION 2.6)
-
-
+IF(LUAROCKS_PREFIX)
+    MESSAGE(STATUS "Installing Torch-SVM through Luarocks")
+    STRING(REGEX REPLACE "(.*)lib/luarocks/rocks.*" "\\1" CMAKE_INSTALL_PREFIX  "${LUAROCKS_PREFIX}")
+    MESSAGE(STATUS "Prefix inferred from Luarocks: ${CMAKE_INSTALL_PREFIX}")
+ENDIF()
 FIND_PACKAGE(Torch REQUIRED)
 
 ADD_SUBDIRECTORY(sgd)
@@ -19,4 +22,3 @@ SET(src)
 SET(luasrc init.lua data.lua)
 
 ADD_TORCH_PACKAGE(svm "${src}" "${luasrc}")
-ADD_TORCH_DOK(dok svm "Machine Learning" "Support Vector Machines" 3.99)
